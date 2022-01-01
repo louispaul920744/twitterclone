@@ -146,9 +146,9 @@ class _EditItemFormState extends State<EditItemForm> {
                         });
 
                         await DatabaseService.updateItem(
-                          docId: widget.documentId,
                           title: _titleController.text,
                           description: _descriptionController.text,
+                          docId: widget.documentId,
                         );
 
                         setState(() {

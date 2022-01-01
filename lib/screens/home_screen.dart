@@ -56,11 +56,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('tweets').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('tweets')
+            .doc(widget.currentUser.uid)
+            .collection('my-tweets')
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('Something went wrong');
-          } else if (snapshot.hasData || snapshot.data != null) {
+          } else if (snapshot.hasData) {
             return ListView.separated(
               separatorBuilder: (context, index) =>
                   const SizedBox(height: 16.0),

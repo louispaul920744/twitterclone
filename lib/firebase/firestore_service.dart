@@ -1,16 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:twitter_clone/firebase/auth_service.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 final CollectionReference reference = firestore.collection('tweets');
 
 class DatabaseService {
-  static String? userId;
-
   static Future<void> addTweet({
     required String title,
     required String description,
   }) async {
-    DocumentReference documentReferencer = reference.doc(userId);
+    User? user = AuthServices.auth.currentUser;
+    String userId = user!.uid;
+    DocumentReference documentReferencer =
+        reference.doc(userId).collection('my-tweets').doc();
 
     Map<String, dynamic> data = <String, dynamic>{
       "title": title,
@@ -32,8 +35,10 @@ class DatabaseService {
     required String description,
     required String docId,
   }) async {
+    User? user = AuthServices.auth.currentUser;
+    String userId = user!.uid;
     DocumentReference documentReferencer =
-        reference.doc(userId).collection('tweets').doc(docId);
+        reference.doc(userId).collection('my-tweets').doc(docId);
 
     Map<String, dynamic> data = <String, dynamic>{
       "title": title,
@@ -53,12 +58,18 @@ class DatabaseService {
   static Future<void> deleteItem({
     required String docId,
   }) async {
+    User? user = AuthServices.auth.currentUser;
+    String userId = user!.uid;
     DocumentReference documentReferencer =
-        reference.doc(userId).collection('tweets').doc(docId);
+        reference.doc(userId).collection('my-tweets').doc(docId);
 
     await documentReferencer
         .delete()
-        .whenComplete(() => print('Note item deleted from the database'))
-        .catchError((e) => print(e));
+        .whenComplete(
+          () => print('Note item deleted from the database'),
+        )
+        .catchError(
+          (e) => print(e),
+        );
   }
 }

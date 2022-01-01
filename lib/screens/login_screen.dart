@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _focusPassword.unfocus();
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: const Text('Firebase Authentication'),
         ),
